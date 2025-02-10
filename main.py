@@ -576,7 +576,7 @@ formatted_time = beijing_time.strftime("%Y%m%d %H:%M:%S")
 about_video1=""
 about_video2=""
 version=formatted_time+","+about_video1
-about="关于本源(Wind5170),"+about_video2
+about="关于本源,"+about_video2
 # 瘦身版
 # 
 all_lines_simple =  ["更新时间,#genre#"] +[version] +[about] +[daily_mtv]+read_txt_to_array('专区/about.txt')+ ['\n'] +\
