@@ -10,16 +10,3 @@
 |黑名单| （blacklist_auto.txt） |  不定时 | 无效直播源自动过滤   |
 |白名单| （whitelist_auto.txt） |  不定时 | 高响应源汇至直播源   |
 
-
-## 公众号・赞赏（觉得好的话，请作者喝咖啡，鼓励更新！）
-
-> 关注获取更多信息，播放工具下载等，有问题公众号留言。
-
-> 公平起见赞赏🍸☕15元以上的朋友们加微信群交流。
-
-![image](./assets/gongzhonghao+appreciate2025.png)
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=kimwang1978/collect-tv-txt&type=Date)](https://star-history.com/#kimwang1978/collect-tv-txt&Date)
-
