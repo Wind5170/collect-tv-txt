@@ -20451,8 +20451,6 @@ CGTN纪录,http://39.135.133.157/wh7f454c46tw2037044632_2010184924/ottrrs.hl.chi
 旅游卫视,http://111.61.236.247:9081/hls/50/index.m3u8
 中国教育4,http://220.249.114.102:9901/tsfile/live/1018_1.m3u8?key=txiptv&playlive=1&authid=0
 东森美洲中国,http://38.64.72.148:80/hls/modn/list/2003/chunklist0.m3u8
-东森亚洲新闻,http://38.64.72.148:80/hls/modn/list/2016/chunklist0.m3u8
-东森亚洲新闻,https://d2e1asnsl7br7b.cloudfront.net/7782e205e72f43aeb4a48ec97f66ebbe/index_3.m3u8
 国会2,http://61.58.60.230:9319/live/124.m3u8
 生命电视,http://211.73.19.201/live/AB167E56-808C-81D4-6471-76DC400D5192.m3u8?fmt=x264_1200K_ts&cpid=admin&size=1920X1080
 ATVA1,https://stream.atv.az/WebRTCAppEE/streams/780339739845112514894920_adaptive.m3u8
@@ -23841,6 +23839,8 @@ DJ舞曲,http://wb.xn--dkw.xn--6qq986b3xl:5244/d/%E5%A4%A9/og1.mp4?mda-nch73gktv
 睛彩竞技,http://231114.xyz:35455/itv/1000000006000270001.m3u8?cdn=ystenlive
 求索动物,http://231114.xyz:35455/itv/6000000002000010046.m3u8?cdn=wasusyt
 求索纪录,http://47.79.37.86:35455/itv/6000000002000032052.m3u8?cdn=wasusyt
+东森亚洲新闻,http://38.64.72.148:80/hls/modn/list/2016/chunklist0.m3u8
+东森亚洲新闻,https://d2e1asnsl7br7b.cloudfront.net/7782e205e72f43aeb4a48ec97f66ebbe/index_3.m3u8
 
 
 ◆◆◆　http://xhztv.top/v6.txt
