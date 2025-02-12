@@ -98,23 +98,6 @@ shandong_lines = []  # 地方台-山东频道
 yunnan_lines = []  # 地方台-云南频道
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ##################【2024-07-30 18:04:56】
 bj_lines = []  # 地方台-北京频道
 cq_lines = []  # 地方台-重庆频道
@@ -403,7 +386,7 @@ def process_channel_line(line):
                 zb_lines.append(process_name_string(line.strip()))
             elif channel_name in mtv_dictionary and check_url_existence(mtv_lines, channel_address):  #MTV
                 mtv_lines.append(process_name_string(line.strip()))
-                else:
+            else:
                 if channel_address not in other_lines_url:
                     other_lines_url.append(channel_address)  # 记录已添加的URL
                     other_lines.append(line.strip())  # 将未分类的频道添加到other_lines
@@ -476,25 +459,6 @@ def process_url(url):
 
 # 获取当前工作目录
 current_directory = os.getcwd()  # 准备读取txt文件
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # 读取多个频道文件到字典中，用于后续的过滤和排序
 ys_dictionary=read_txt_to_array('主频道/CCTV.txt')  # 仅排序用
@@ -745,6 +709,7 @@ all_lines_simple =  ["更新时间,#genre#"] +[version] +[about] +[daily_mtv]+re
              ["🍹定制P3P☕️,#genre#"] + read_txt_to_array('专区/p3p.txt') + ['\n'] + \
              ["💓英语频道,#genre#"] + read_txt_to_array('专区/♪英语频道.txt') + ['\n'] + \
              ["💓4K(Test),#genre#"] + read_txt_to_array('专区/4K.txt') + ['\n'] + \
+             ["☘️江苏频道,#genre#"] + sorted(set(correct_name_data(corrections_name,jsu_lines))) + ['\n'] + \
              ["☘️湖南频道,#genre#"] + sort_data(hn_dictionary,set(correct_name_data(corrections_name,hn_lines))) + ['\n'] + \
              ["☘️湖北频道,#genre#"] + sort_data(hb_dictionary,set(correct_name_data(corrections_name,hb_lines))) + ['\n'] + \
              ["☘️广东频道,#genre#"] + sort_data(gd_dictionary,set(correct_name_data(corrections_name,gd_lines))) + ['\n'] + \
@@ -832,7 +797,7 @@ all_lines =  ["更新时间,#genre#"] +[version]  +[about] +[daily_mtv]+read_txt
 #             ["港澳台,#genre#"] + sort_data(gat_dictionary,set(correct_name_data(corrections_name,gat_lines))) + ['\n'] 
 
 
-
+# ========================================写入TXT格式直播源列表文件========================================
 # 将合并后的文本写入文件
 output_file = "merged_output.txt"
 output_file_simple = "merged_output_simple.txt"
@@ -885,11 +850,11 @@ try:
 except Exception as e:
     print(f"保存文件时发生错误：{e}")  # 捕获异常并打印错误信息
 
-################# 添加生成m3u文件
+# ========================================写入m3u格式直播源列表文件========================================
 # 报时
 #print(f"time: {datetime.now().strftime("%Y%m%d_%H_%M_%S")}")
 
-# 读取频道logo信息
+# 读取频道图标logo信息
 channels_logos = read_txt_to_array('assets/logo.txt')  # 从文件中读取logo库
 
 # 定义函数：根据频道名称获取logo
@@ -999,6 +964,11 @@ def make_m3u(txt_file, m3u_file, m3u_file_copy):
 # 调用函数生成 M3U 文件
 make_m3u(output_file, "merged_output.m3u", "live.m3u")
 make_m3u(output_file_simple, "merged_output_simple.m3u", "live_lite.m3u")
+
+
+
+# ========================================其他========================================
+
 
 # 执行结束时间
 timeend = datetime.now()
