@@ -21,6 +21,8 @@ def traditional_to_simplified(text: str) -> str:
 
 # 记录程序执行的开始时间
 timestart = datetime.now()
+# 报时  '',
+#print(f"time: {datetime.now().strftime("%Y%m%d_%H_%M_%S")}")             
 
 # 读取文本文件到数组的函数
 def read_txt_to_array(file_name):
@@ -41,7 +43,7 @@ def read_txt_to_array(file_name):
         print(f"An error occurred: {e}")
         return []
 
-# 读取黑名单文件的函数
+# 读取 BlackList （黑名单文件）的函数
 def read_blacklist_from_txt(file_path):
     """
     从指定文件中读取黑名单内容，返回一个包含黑名单项的列表。
@@ -56,7 +58,7 @@ def read_blacklist_from_txt(file_path):
 # 读取黑名单文件
 blacklist_auto = read_blacklist_from_txt('assets/blacklist1/blacklist_auto.txt')
 blacklist_manual = read_blacklist_from_txt('assets/blacklist1/blacklist_manual.txt')
-# 合并黑名单，使用集合提高检索速度
+# combined_blacklist = list(set(blacklist_auto + blacklist_manual))
 combined_blacklist = set(blacklist_auto + blacklist_manual)
 
 # 定义多个列表，用于存储不同频道的行文本
@@ -81,46 +83,62 @@ yy_lines = []  # 音乐频道
 game_lines = []  # 游戏频道
 radio_lines = []  # 收音机频道
 
-# 地方台频道
-zj_lines = []  # 浙江频道
-jsu_lines = []  # 江苏频道
-gd_lines = []  # 广东频道
-hn_lines = []  # 湖南频道
-ah_lines = []  # 安徽频道
-hain_lines = []  # 海南频道
-nm_lines = []  # 内蒙频道
-hb_lines = []  # 湖北频道
-ln_lines = []  # 辽宁频道
-sx_lines = []  # 陕西频道
-shanxi_lines = []  # 山西频道
-shandong_lines = []  # 山东频道
-yunnan_lines = []  # 云南频道
+zj_lines = []  # 地方台-浙江频道
+jsu_lines = []  # 地方台-江苏频道
+gd_lines = []  # 地方台-广东频道
+hn_lines = []  # 地方台-湖南频道
+ah_lines = []  # 地方台-安徽频道
+hain_lines = []  # 地方台-海南频道
+nm_lines = []  # 地方台-内蒙频道
+hb_lines = []  # 地方台-湖北频道
+ln_lines = []  # 地方台-辽宁频道
+sx_lines = []  # 地方台-陕西频道
+shanxi_lines = []  # 地方台-山西频道
+shandong_lines = []  # 地方台-山东频道
+yunnan_lines = []  # 地方台-云南频道
 
-# 新增地方台频道
-bj_lines = []  # 北京频道
-cq_lines = []  # 重庆频道
-fj_lines = []  # 福建频道
-gs_lines = []  # 甘肃频道
-gx_lines = []  # 广西频道
-gz_lines = []  # 贵州频道
-heb_lines = []  # 河北频道
-hen_lines = []  # 河南频道
-hlj_lines = []  # 黑龙江频道
-jl_lines = []  # 吉林频道
-jx_lines = []  # 江西频道
-nx_lines = []  # 宁夏频道
-qh_lines = []  # 青海频道
-sc_lines = []  # 四川频道
-tj_lines = []  # 天津频道
-xj_lines = []  # 新疆频道
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##################【2024-07-30 18:04:56】
+bj_lines = []  # 地方台-北京频道
+cq_lines = []  # 地方台-重庆频道
+fj_lines = []  # 地方台-福建频道
+gs_lines = []  # 地方台-甘肃频道
+gx_lines = []  # 地方台-广西频道
+gz_lines = []  # 地方台-贵州频道
+heb_lines = []  # 地方台-河北频道
+hen_lines = []  # 地方台-河南频道
+hlj_lines = []  # 地方台-黑龙江频道
+jl_lines = []  # 地方台-吉林频道
+jx_lines = []  # 地方台-江西频道
+nx_lines = []  # 地方台-宁夏频道
+qh_lines = []  # 地方台-青海频道
+sc_lines = []  # 地方台-四川频道
+tj_lines = []  # 地方台-天津频道
+xj_lines = []  # 地方台-新疆频道
 
 # 其他特殊频道
 zb_lines = []  # 直播中国
 mtv_lines = []  # MTV频道
 Olympics_2024_Paris_lines = []  # 2024巴黎奥运会频道
 other_lines = []  # 其他频道
-other_lines_url = []  # 用于记录已添加的URL，避免重复
-
+other_lines_url = []  # 用于记录已添加的URL，为降低other文件大小，剔除重复url添加
 # 处理频道名称字符串的函数
 def process_name_string(input_str):
     """
@@ -149,20 +167,24 @@ def process_part(part_str):
         part_str = part_str.replace("PLUS", "+")  # 替换PLUS
         part_str = part_str.replace("1080", "")  # 替换1080
         filtered_str = ''.join(char for char in part_str if char.isdigit() or char == 'K' or char == '+')
-        if not filtered_str.strip():  # 如果处理后为空，则返回原名称
+        if not filtered_str.strip():  # 处理特殊情况，如果发现没有找到频道数字返回原名称
             filtered_str = part_str.replace("CCTV", "")
-        if len(filtered_str) > 2 and re.search(r'4K|8K', filtered_str):  # 特殊处理4K和8K名称
+        if len(filtered_str) > 2 and re.search(r'4K|8K', filtered_str):  # 特殊处理CCTV中部分4K和8K名称
+           # 使用正则表达式替换，删除4K或8K后面的字符，并且保留4K或8K
             filtered_str = re.sub(r'(4K|8K).*', r'\1', filtered_str)
             if len(filtered_str) > 2:
+                # 给4K或8K添加括号                                        
                 filtered_str = re.sub(r'(4K|8K)', r'(\1)', filtered_str)
         return "CCTV" + filtered_str
     elif "卫视" in part_str:
+        # 定义正则表达式模式，匹配“卫视”后面的内容                                                                         
         pattern = r'卫视「.*」'  # 定义正则表达式模式
+        # 使用sub函数替换匹配的内容为空字符串                                                             
         result_str = re.sub(pattern, '卫视', part_str)  # 替换匹配的内容
         return result_str
     return part_str
 
-# 获取URL文件扩展名的函数
+# 获取URL文件扩展名的函数，准备支持m3u格式
 def get_url_file_extension(url):
     """
     从URL中提取文件扩展名。
@@ -204,7 +226,8 @@ def convert_m3u_to_txt(m3u_content):
         
         # 处理后缀名为m3u，但是内容为txt的文件
         if "#genre#" not in line and "," in line and "://" in line:
-            # 定义正则表达式，匹配频道名称和URL的格式，并确保URL包含 "://"
+            # 定义正则表达式，匹配频道名称，URL的格式，并确保URL包含 "://"
+            # xxxx,http://xxxxx.xx.xx                                     
             pattern = r'^[^,]+,[^\s]+://[^\s]+$'
             if bool(re.match(pattern, line)):
                 txt_lines.append(line)
@@ -216,13 +239,13 @@ def convert_m3u_to_txt(m3u_content):
 def check_url_existence(data_list, url):
     """
     检查给定的URL是否已经存在于列表中。
-    :param data_list: 包含数据的列表
-    :param url: 要检查的URL
-    :return: 如果URL不存在于列表中，返回True；否则返回False
+    :param data_list: List of strings containing the data 包含数据的列表
+    :param url: The URL to check for existence 要检查的URL
+    :return: True if the URL exists in the list, otherwise False 如果URL不存在于列表中，返回True；否则返回False
     """
     # 提取列表中的URL部分
     urls = [item.split(',')[1] for item in data_list]
-    return url not in urls
+    return url not in urls #如果不存在则返回true，需要
 
 # 定义一个函数，用于清理URL中的$符号及其后面的内容
 def clean_url(url):
@@ -262,7 +285,7 @@ def clean_channel_name(channel_name, removal_list):
     
     return channel_name
 
-# 定义一个函数，用于处理频道行，包括分发到不同的频道类别
+# 定义一个函数，用于归类处理频道行，把这部分从process_url剥离出来，为以后加入whitelist源清单做准备。包括分发到不同的频道类别。
 def process_channel_line(line):
     """
     处理频道行，包括分发到不同的频道类别。
@@ -270,20 +293,117 @@ def process_channel_line(line):
     """
     if "#genre#" not in line and "#EXTINF:" not in line and "," in line and "://" in line:
         channel_name = line.split(',')[0].strip()  # 提取频道名称
-        channel_name = clean_channel_name(channel_name, removal_list)  # 清理频道名称中的特定字符
+        channel_name = clean_channel_name(channel_name, removal_list)  # 清理频道名称channel_name中的特定字符
         channel_name = traditional_to_simplified(channel_name)  # 将繁体字转换为简体字
         
         channel_address = clean_url(line.split(',')[1].strip())  # 清理URL中的$符号及其后面的内容
         line = f"{channel_name},{channel_address}"  # 重新组织行内容
         
-        if channel_address not in combined_blacklist:  # 判断当前源是否在黑名单中
+        if channel_address not in combined_blacklist:  # 判断当前源是否在黑名单blacklist中
             # 根据频道名称或频道地址，将频道分发到不同的类别
             if "CCTV" in channel_name and check_url_existence(ys_lines, channel_address):  # 央视频道
                 ys_lines.append(process_name_string(line.strip()))
-            elif channel_name in ws_dictionary and check_url_existence(ws_lines, channel_address):  # 卫视频道
+            # elif channel_name in Olympics_2024_Paris_dictionary and check_url_existence(Olympics_2024_Paris_lines, channel_address): #奥运频道 ADD 2024-08-05
+            #     Olympics_2024_Paris_lines.append(process_name_string(line.strip()))
+            elif channel_name in ws_dictionary and check_url_existence(ws_lines, channel_address): #卫视频道
                 ws_lines.append(process_name_string(line.strip()))
-            # ...（其他频道类别的分发逻辑，省略以节省篇幅）
-            else:
+            elif channel_name in ty_dictionary and check_url_existence(ty_lines, channel_address):  #体育频道
+                ty_lines.append(process_name_string(line.strip()))
+            elif channel_name in dy_dictionary and check_url_existence(dy_lines, channel_address):  #电影频道
+                dy_lines.append(process_name_string(line.strip()))
+            elif channel_name in dsj_dictionary and check_url_existence(dsj_lines, channel_address):  #电视剧频道
+                dsj_lines.append(process_name_string(line.strip()))
+            elif channel_name in sh_dictionary and check_url_existence(sh_lines, channel_address):  #上海频道
+                sh_lines.append(process_name_string(line.strip()))
+            elif channel_name in gat_dictionary and check_url_existence(gat_lines, channel_address):  #港澳台
+                gat_lines.append(process_name_string(line.strip()))
+            elif channel_name in gj_dictionary and check_url_existence(gj_lines, channel_address):  #国际台
+                gj_lines.append(process_name_string(line.strip()))
+            elif channel_name in jlp_dictionary and check_url_existence(jlp_lines, channel_address):  #纪录片
+                jlp_lines.append(process_name_string(line.strip()))
+            elif channel_name in dhp_dictionary and check_url_existence(dhp_lines, channel_address):  #动画片
+                dhp_lines.append(process_name_string(line.strip()))
+            elif channel_name in xq_dictionary and check_url_existence(xq_lines, channel_address):  #戏曲
+                xq_lines.append(process_name_string(line.strip()))
+            elif channel_name in js_dictionary and check_url_existence(js_lines, channel_address):  #解说
+                js_lines.append(process_name_string(line.strip()))
+            elif channel_name in cw_dictionary and check_url_existence(cw_lines, channel_address):  #春晚
+                cw_lines.append(process_name_string(line.strip()))
+            elif channel_name in mx_dictionary and check_url_existence(mx_lines, channel_address):  #明星
+                mx_lines.append(process_name_string(line.strip()))
+            elif channel_name in ztp_dictionary and check_url_existence(ztp_lines, channel_address):  #主题片
+                ztp_lines.append(process_name_string(line.strip()))
+            elif channel_name in zy_dictionary and check_url_existence(zy_lines, channel_address):  #综艺频道
+                zy_lines.append(process_name_string(line.strip()))
+            elif channel_name in yy_dictionary and check_url_existence(yy_lines, channel_address):  #音乐频道
+                yy_lines.append(process_name_string(line.strip()))
+            elif channel_name in game_dictionary and check_url_existence(game_lines, channel_address):  #游戏频道
+                game_lines.append(process_name_string(line.strip()))
+            elif channel_name in radio_dictionary and check_url_existence(radio_lines, channel_address):  #收音机频道
+                radio_lines.append(process_name_string(line.strip()))
+            elif channel_name in zj_dictionary and check_url_existence(zj_lines, channel_address):  #地方台-浙江频道
+                zj_lines.append(process_name_string(line.strip()))
+            elif channel_name in jsu_dictionary and check_url_existence(jsu_lines, channel_address):  #地方台-江苏频道
+                jsu_lines.append(process_name_string(line.strip()))
+            elif channel_name in gd_dictionary and check_url_existence(gd_lines, channel_address):  #地方台-广东频道
+                gd_lines.append(process_name_string(line.strip()))
+            elif channel_name in hn_dictionary and check_url_existence(hn_lines, channel_address):  #地方台-湖南频道
+                hn_lines.append(process_name_string(line.strip()))
+            elif channel_name in hb_dictionary and check_url_existence(hb_lines, channel_address):  #地方台-湖北频道
+                hb_lines.append(process_name_string(line.strip()))
+            elif channel_name in ah_dictionary and check_url_existence(ah_lines, channel_address):  #地方台-安徽频道
+                ah_lines.append(process_name_string(line.strip()))
+            elif channel_name in hain_dictionary and check_url_existence(hain_lines, channel_address):  #地方台-海南频道
+                hain_lines.append(process_name_string(line.strip()))
+            elif channel_name in nm_dictionary and check_url_existence(nm_lines, channel_address):  #地方台-内蒙频道
+                nm_lines.append(process_name_string(line.strip()))
+            elif channel_name in ln_dictionary and check_url_existence(ln_lines, channel_address):  #地方台-辽宁频道
+                ln_lines.append(process_name_string(line.strip()))
+            elif channel_name in sx_dictionary and check_url_existence(sx_lines, channel_address):  #地方台-陕西频道
+                sx_lines.append(process_name_string(line.strip()))
+            elif channel_name in shanxi_dictionary and check_url_existence(shanxi_lines, channel_address):  #地方台-山西频道
+                shanxi_lines.append(process_name_string(line.strip()))
+            elif channel_name in shandong_dictionary and check_url_existence(shandong_lines, channel_address):  #地方台-山东频道
+                shandong_lines.append(process_name_string(line.strip()))
+            elif channel_name in yunnan_dictionary and check_url_existence(yunnan_lines, channel_address):  #地方台-云南频道
+                yunnan_lines.append(process_name_string(line.strip()))
+            elif channel_name in bj_dictionary and check_url_existence(bj_lines, channel_address):  #地方台-北京频道 ADD【2024-07-30 20:52:53】
+                bj_lines.append(process_name_string(line.strip()))
+            elif channel_name in cq_dictionary and check_url_existence(cq_lines, channel_address):  #地方台-重庆频道 ADD【2024-07-30 20:52:53】
+                cq_lines.append(process_name_string(line.strip()))
+            elif channel_name in fj_dictionary and check_url_existence(fj_lines, channel_address):  #地方台-福建频道 ADD【2024-07-30 20:52:53】
+                            fj_lines.append(process_name_string(line.strip()))
+            elif channel_name in gs_dictionary and check_url_existence(gs_lines, channel_address):  #地方台-甘肃频道 ADD【2024-07-30 20:52:53】
+                gs_lines.append(process_name_string(line.strip()))
+            elif channel_name in gx_dictionary and check_url_existence(gx_lines, channel_address):  #地方台-广西频道 ADD【2024-07-30 20:52:53】
+                gx_lines.append(process_name_string(line.strip()))
+            elif channel_name in gz_dictionary and check_url_existence(gz_lines, channel_address):  #地方台-贵州频道 ADD【2024-07-30 20:52:53】
+                gz_lines.append(process_name_string(line.strip()))
+            elif channel_name in heb_dictionary and check_url_existence(heb_lines, channel_address):  #地方台-河北频道 ADD【2024-07-30 20:52:53】
+                heb_lines.append(process_name_string(line.strip()))
+            elif channel_name in hen_dictionary and check_url_existence(hen_lines, channel_address):  #地方台-河南频道 ADD【2024-07-30 20:52:53】
+                hen_lines.append(process_name_string(line.strip()))
+            elif channel_name in hlj_dictionary and check_url_existence(hlj_lines, channel_address):  #地方台-黑龙江频道 ADD【2024-07-30 20:52:53】
+                hlj_lines.append(process_name_string(line.strip()))
+            elif channel_name in jl_dictionary and check_url_existence(jl_lines, channel_address):  #地方台-吉林频道 ADD【2024-07-30 20:52:53】
+                jl_lines.append(process_name_string(line.strip()))
+            elif channel_name in nx_dictionary and check_url_existence(nx_lines, channel_address):  #地方台-宁夏频道 ADD【2024-07-30 20:52:53】
+                nx_lines.append(process_name_string(line.strip()))
+            elif channel_name in jx_dictionary and check_url_existence(jx_lines, channel_address):  #地方台-江西频道 ADD【2024-07-30 20:52:53】
+                jx_lines.append(process_name_string(line.strip()))
+            elif channel_name in qh_dictionary and check_url_existence(qh_lines, channel_address):  #地方台-青海频道 ADD【2024-07-30 20:52:53】
+                qh_lines.append(process_name_string(line.strip()))
+            elif channel_name in sc_dictionary and check_url_existence(sc_lines, channel_address):  #地方台-四川频道 ADD【2024-07-30 20:52:53】
+                sc_lines.append(process_name_string(line.strip()))
+            elif channel_name in tj_dictionary and check_url_existence(tj_lines, channel_address):  #地方台-天津频道 ADD【2024-07-30 20:52:53】
+                tj_lines.append(process_name_string(line.strip()))
+            elif channel_name in xj_dictionary and check_url_existence(xj_lines, channel_address):  #地方台-新疆频道 ADD【2024-07-30 20:52:53】
+                xj_lines.append(process_name_string(line.strip()))
+            elif channel_name in zb_dictionary and check_url_existence(zb_lines, channel_address):  #直播中国
+                zb_lines.append(process_name_string(line.strip()))
+            elif channel_name in mtv_dictionary and check_url_existence(mtv_lines, channel_address):  #MTV
+                mtv_lines.append(process_name_string(line.strip()))
+                else:
                 if channel_address not in other_lines_url:
                     other_lines_url.append(channel_address)  # 记录已添加的URL
                     other_lines.append(line.strip())  # 将未分类的频道添加到other_lines
@@ -352,8 +472,29 @@ def process_url(url):
     except Exception as e:
         print(f"处理URL时发生错误：{e}")  # 捕获并打印异常信息
 
+
+
 # 获取当前工作目录
 current_directory = os.getcwd()  # 准备读取txt文件
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # 读取多个频道文件到字典中，用于后续的过滤和排序
 ys_dictionary=read_txt_to_array('主频道/CCTV.txt')  # 仅排序用
@@ -379,7 +520,6 @@ radio_dictionary=read_txt_to_array('主频道/收音机频道.txt')  # 过滤
 zb_dictionary=read_txt_to_array('主频道/直播中国.txt')  # 过滤
 mtv_dictionary=read_txt_to_array('主频道/MTV.txt')  # 过滤
 # Olympics_2024_Paris_dictionary=read_txt_to_array('主频道/奥运频道.txt')  # 过滤
-
 # 地方台频道文件
 zj_dictionary=read_txt_to_array('地方台/浙江频道.txt')  # 过滤
 jsu_dictionary=read_txt_to_array('地方台/江苏频道.txt')  # 过滤
@@ -394,6 +534,8 @@ sx_dictionary=read_txt_to_array('地方台/陕西频道.txt')  # 过滤
 shanxi_dictionary=read_txt_to_array('地方台/山西频道.txt')  # 过滤
 shandong_dictionary=read_txt_to_array('地方台/山东频道.txt')  # 过滤
 yunnan_dictionary=read_txt_to_array('地方台/云南频道.txt')  # 过滤
+
+
 
 # 更多地方台频道文件
 bj_dictionary=read_txt_to_array('地方台/北京频道.txt')  # 过滤
@@ -412,6 +554,7 @@ qh_dictionary=read_txt_to_array('地方台/青海频道.txt')  # 过滤
 sc_dictionary=read_txt_to_array('地方台/四川频道.txt')  # 过滤
 tj_dictionary=read_txt_to_array('地方台/天津频道.txt')  # 过滤
 xj_dictionary=read_txt_to_array('地方台/新疆频道.txt')  # 过滤
+
 
 # 读取纠错频道名称方法
 def load_corrections_name(filename):
@@ -483,7 +626,7 @@ def sort_data(order, data):
     sorted_data = sorted(data, key=sort_key)
     return sorted_data
 
-# 定义需要处理的URL列表
+# 定义需要处理的URL列表，主要用于将默认 MMDD 格式日期替换为实际日期
 urls = read_txt_to_array('assets/urls-daily.txt')
 # 处理每个URL
 for url in urls:
@@ -534,7 +677,7 @@ def custom_sort(s):
     else:
         return 0  # 其他字符串保持原顺序
 
-# 读取白名单文件，将高响应源加入merged_output
+# 读取白名单文件whitelist，把高响应源从白名单中抽出加入merged_output
 print(f"ADD whitelist_auto.txt")
 whitelist_auto_lines=read_txt_to_array('assets/blacklist1/whitelist_auto.txt') #
 for whitelist_line in whitelist_auto_lines:
@@ -684,9 +827,22 @@ all_lines =  ["更新时间,#genre#"] +[version]  +[about] +[daily_mtv]+read_txt
              ["❤️与凤行,#genre#"] + read_txt_to_array('专区/特供频道/♪与凤行.txt')  + ['\n'] + \
              ["❤️以家人之名,#genre#"] + read_txt_to_array('专区/特供频道/♪以家人之名.txt')
 
-
-
 # 定制内容的输出文件（注释掉了，未启用）
+# custom_lines_zhang =  ["更新时间,#genre#"] +[version] + ['\n'] +\
+#             ["港澳台,#genre#"] + sort_data(gat_dictionary,set(correct_name_data(corrections_name,gat_lines))) + ['\n'] 
+
+
+
+# 将合并后的文本写入文件
+output_file = "merged_output.txt"
+output_file_simple = "merged_output_simple.txt"
+others_file = "others_output.txt"
+
+# NEW将合并后的文本写入文件
+new_output_file = "live.txt"
+new_output_file_simple = "live_lite.txt"
+
+# # custom定制
 # output_file_custom_zhang = "custom/zhang.txt"
 
 try:
@@ -753,6 +909,34 @@ def get_logo_by_channel_name(channel_name):
             return url  # 返回对应的 logo URL
     return None  # 如果未找到，返回 None
 
+
+# #output_text = '#EXTM3U x-tvg-url="https://live.fanmingming.com/e.xml,https://epg.112114.xyz/pp.xml.gz,https://assets.livednow.com/epg.xml"\n'
+# output_text = '#EXTM3U x-tvg-url="https://live.fanmingming.com/e.xml"\n'
+
+# with open(output_file, "r", encoding='utf-8') as file:
+#     input_text = file.read()
+
+# lines = input_text.strip().split("\n")
+# group_name = ""
+# for line in lines:
+#     parts = line.split(",")
+#     if len(parts) == 2 and "#genre#" in line:
+#         group_name = parts[0]
+#     elif len(parts) == 2:
+#         channel_name = parts[0]
+#         channel_url = parts[1]
+#         logo_url=get_logo_by_channel_name(channel_name)
+#         if logo_url is None:  #not found logo
+#             output_text += f"#EXTINF:-1 group-title=\"{group_name}\",{channel_name}\n"
+#             output_text += f"{channel_url}\n"
+#         else:
+#             output_text += f"#EXTINF:-1  tvg-name=\"{channel_name}\" tvg-logo=\"{logo_url}\"  group-title=\"{group_name}\",{channel_name}\n"
+#             output_text += f"{channel_url}\n"
+
+# with open("merged_output.m3u", "w", encoding='utf-8') as file:
+#     file.write(output_text)
+
+# print("merged_output.m3u文件已生成。")
 # 定义函数：生成 M3U 文件
 def make_m3u(txt_file, m3u_file, m3u_file_copy):
     """
@@ -763,9 +947,23 @@ def make_m3u(txt_file, m3u_file, m3u_file_copy):
     """
     try:
         # 定义 M3U 文件的头部信息
-        output_text = '#EXTM3U x-tvg-url="<url id="culkonp3om1kh302vdh0" type="url" status="failed" title="" wc="0">https://live.fanmingming.cn/e.xml</url> "\n'
+        #output_text = '#EXTM3U x-tvg-url="https://live.fanmingming.com/e.xml,https://epg.112114.xyz/pp.xml.gz,https://assets.livednow.com/epg.xml"\n'
+        output_text = '#EXTM3U x-tvg-url="https://live.fanmingming.cn/e.xml"\n'
 
-        # 读取输入文件内容
+        # # 打开txt文件读取
+        # with open(txt_file, 'r', encoding='utf-8') as txt:
+        #     lines = txt.readlines()
+
+        # # 创建m3u文件并写入
+        # with open(m3u_file, 'w', encoding='utf-8') as m3u:
+        #     # 写入m3u文件的头部信息
+        #     m3u.write('#EXTM3U\n')
+
+        #     # 写入音频文件路径
+        #     for line in lines:
+        #         line = line.strip()
+        #         if line:  # 忽略空行
+        #             m3u.write(f'{line}\n')
         with open(txt_file, "r", encoding='utf-8') as file:
             input_text = file.read()
 
