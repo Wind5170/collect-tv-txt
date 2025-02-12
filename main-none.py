@@ -658,7 +658,7 @@ for whitelist_line in whitelist_auto_lines:
         if response_time < 2000:  # 2s以内的高响应源
             process_channel_line(",".join(whitelist_parts[1:]))
 
-# 随机取得URL
+# 随机取得URL，加入今日推荐
 def get_random_url(file_path):
     """
     从文件中随机获取一个URL。
@@ -798,14 +798,14 @@ all_lines =  ["更新时间,#genre#"] +[version]  +[about] +[daily_mtv]+read_txt
              ["❤️以家人之名,#genre#"] + read_txt_to_array('专区/特供频道/♪以家人之名.txt')
 
 # 定制内容的输出文件（注释掉了，未启用）
-# custom_lines_zhang =  ["更新时间,#genre#"] +[version] + ['\n'] +\
+# custom_lines_wang =  ["更新时间,#genre#"] +[version] + ['\n'] +\
 #             ["港澳台,#genre#"] + sort_data(gat_dictionary,set(correct_name_data(corrections_name,gat_lines))) + ['\n'] 
 
 
 # ========================================写入TXT格式直播源列表文件========================================
 # 将合并后的文本写入文件
-output_file = "merged_output.txt"
-output_file_simple = "merged_output_simple.txt"
+# output_file = "output/merged_output.txt"
+# output_file_simple = "output/merged_output_simple.txt"
 others_file = "others_output.txt"
 
 # NEW将合并后的文本写入文件
@@ -813,14 +813,14 @@ new_output_file = "live.txt"
 new_output_file_simple = "live_lite.txt"
 
 # # custom定制
-# output_file_custom_zhang = "custom/zhang.txt"
+# output_file_custom_wang = "custom/wang.txt"
 
 try:
     # 将“瘦身版”内容写入文件
-    with open(output_file_simple, 'w', encoding='utf-8') as f:
-        for line in all_lines_simple:  # 遍历 all_lines_simple 列表
-            f.write(line + '\n')  # 将每一行写入文件，添加换行符
-    print(f"合并后的文本已保存到文件: {output_file_simple}")
+    # with open(output_file_simple, 'w', encoding='utf-8') as f:
+    #     for line in all_lines_simple:  # 遍历 all_lines_simple 列表
+    #         f.write(line + '\n')  # 将每一行写入文件，添加换行符
+    # print(f"合并后的文本已保存到文件: {output_file_simple}")
 
     # 将“瘦身版”内容写入新文件
     with open(new_output_file_simple, 'w', encoding='utf-8') as f:
@@ -829,9 +829,9 @@ try:
     print(f"合并后的文本已保存到文件: {new_output_file_simple}")
 
     # 将“全集版”内容写入文件
-    with open(output_file, 'w', encoding='utf-8') as f:
-        for line in all_lines:  # 遍历 all_lines 列表
-            f.write(line + '\n')  # 将每一行写入文件，添加换行符
+    # with open(output_file, 'w', encoding='utf-8') as f:
+    #     for line in all_lines:  # 遍历 all_lines 列表
+    #         f.write(line + '\n')  # 将每一行写入文件，添加换行符
     print(f"合并后的文本已保存到文件: {output_file}")
 
     # 将“全集版”内容写入新文件
@@ -847,10 +847,10 @@ try:
     print(f"Others已保存到文件: {others_file}")
 
     # 定制内容的写入（注释掉了，未启用）
-    # with open(output_file_custom_zhang, 'w', encoding='utf-8') as f:
-    #     for line in custom_lines_zhang:  # 遍历 custom_lines_zhang 列表
+    # with open(output_file_custom_wang, 'w', encoding='utf-8') as f:
+    #     for line in custom_lines_wang:  # 遍历 custom_lines_wang 列表
     #         f.write(line + '\n')  # 将每一行写入文件，添加换行符
-    # print(f"合并后的文本已保存到文件: {output_file_custom_zhang}")
+    # print(f"合并后的文本已保存到文件: {output_file_custom_wang}")
 
 except Exception as e:
     print(f"保存文件时发生错误：{e}")  # 捕获异常并打印错误信息
