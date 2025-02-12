@@ -1,4 +1,4 @@
-name: 'Daily Job(test)'  # 工作流的名称
+name: 'Daily Job(test)'  # 工作流的名称 
 
 on:
   schedule:
