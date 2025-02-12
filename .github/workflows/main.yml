@@ -2,8 +2,7 @@ name: 'Daily Job'
 
 on:
   schedule:
-  #  - cron: '0 22 * * *'  # 每天 UTC 时间 22:00 (加上8小时后为次日06:00)触发
-  #  - cron: '0 10 * * *'  # 每天 UTC 时间 10:00 (加上8小时后为次日18:00)触发
+    - cron: '0 4 * * *'  # 每天 UTC 时间 4:00 (加上8小时后为12:00)触发
   workflow_dispatch:
     inputs:
       environment:
