@@ -804,8 +804,8 @@ all_lines =  ["更新时间,#genre#"] +[version]  +[about] +[daily_mtv]+read_txt
 
 # ========================================写入TXT格式直播源列表文件========================================
 # 将合并后的文本写入文件
-# output_file = "output/merged_output.txt"
-# output_file_simple = "output/merged_output_simple.txt"
+output_file = "merged_output.txt"
+output_file_simple = "merged_output_simple.txt"
 others_file = "others_output.txt"
 
 # NEW将合并后的文本写入文件
@@ -832,7 +832,7 @@ try:
     # with open(output_file, 'w', encoding='utf-8') as f:
     #     for line in all_lines:  # 遍历 all_lines 列表
     #         f.write(line + '\n')  # 将每一行写入文件，添加换行符
-    print(f"合并后的文本已保存到文件: {output_file}")
+    # print(f"合并后的文本已保存到文件: {output_file}")
 
     # 将“全集版”内容写入新文件
     with open(new_output_file, 'w', encoding='utf-8') as f:
