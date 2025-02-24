@@ -1,4 +1,3 @@
-# 导入必要的模块
 import urllib.request
 from urllib.parse import urlparse
 import re  # 正则表达式模块，用于字符串匹配和处理
@@ -7,7 +6,7 @@ from datetime import datetime, timedelta, timezone  # 日期和时间模块
 import random  # 随机数模块
 import opencc  # 简繁转换模块
 
-# 简繁转换函数
+# 简繁转换函数========================================
 def traditional_to_simplified(text: str) -> str:
     """
     将繁体中文文本转换为简体中文。
@@ -19,12 +18,12 @@ def traditional_to_simplified(text: str) -> str:
     simplified_text = converter.convert(text)
     return simplified_text
 
-# 记录程序执行的开始时间
+# 记录程序执行的开始时间========================================
 timestart = datetime.now()
 # 报时  '',
 #print(f"time: {datetime.now().strftime("%Y%m%d_%H_%M_%S")}")             
 
-# 读取文本文件到数组的函数
+# 读取文本文件到数组的函数========================================
 def read_txt_to_array(file_name):
     """
     从指定文件中读取文本内容，返回一个包含每行内容的列表。
@@ -43,7 +42,7 @@ def read_txt_to_array(file_name):
         print(f"An error occurred: {e}")
         return []
 
-# 读取 BlackList （黑名单文件）的函数
+# 读取 BlackList （黑名单文件）的函数========================================
 def read_blacklist_from_txt(file_path):
     """
     从指定文件中读取黑名单内容，返回一个包含黑名单项的列表。
@@ -55,13 +54,18 @@ def read_blacklist_from_txt(file_path):
     BlackList = [line.split(',')[1].strip() for line in lines if ',' in line]
     return BlackList
 
-# 读取黑名单文件
+# 读取黑名单文件========================================
+    """
+    【assets/blacklist1/blacklist_auto.txt】  自动生成的黑名单，由【assets/blacklist1/blacklist1.py】生成
+    【assets/blacklist1/blacklist_manual.txt】    手工编写的黑名单
+    """
+
 blacklist_auto = read_blacklist_from_txt('assets/blacklist1/blacklist_auto.txt')
 blacklist_manual = read_blacklist_from_txt('assets/blacklist1/blacklist_manual.txt')
 # combined_blacklist = list(set(blacklist_auto + blacklist_manual))
 combined_blacklist = set(blacklist_auto + blacklist_manual)
 
-# 定义多个列表，用于存储不同频道的行文本
+# 定义列表，用于存储不同频道的行文本========================================
 # 示例：sh_lines 存储上海频道的内容
 sh_lines = []  # 上海频道
 ys_lines = []  # CCTV频道
@@ -122,10 +126,12 @@ wuxi_lines = []  # 地方台-无锡频道
 # 其他特殊频道
 zb_lines = []  # 直播中国
 mtv_lines = []  # MTV频道
-Olympics_2024_Paris_lines = []  # 2024巴黎奥运会频道
+# Olympics_2024_Paris_lines = []  # 2024巴黎奥运会频道
 other_lines = []  # 其他频道
 other_lines_url = []  # 用于记录已添加的URL，为降低other文件大小，剔除重复url添加
-# 处理频道名称字符串的函数
+
+
+# 处理频道名称字符串的函数========================================
 def process_name_string(input_str):
     """
     对频道名称字符串进行处理，包括拆分和单独处理每个部分。
@@ -140,7 +146,7 @@ def process_name_string(input_str):
     result_str = ','.join(processed_parts)
     return result_str
 
-# 处理频道名称部分的函数
+# 处理频道名称部分的函数========================================
 def process_part(part_str):
     """
     对频道名称的每个部分进行处理，包括去除特定字符和格式化。
@@ -170,7 +176,7 @@ def process_part(part_str):
         return result_str
     return part_str
 
-# 获取URL文件扩展名的函数，准备支持m3u格式
+# 获取URL文件扩展名的函数，准备支持m3u格式========================================
 def get_url_file_extension(url):
     """
     从URL中提取文件扩展名。
@@ -182,7 +188,7 @@ def get_url_file_extension(url):
     extension = os.path.splitext(path)[1]  # 提取文件扩展名
     return extension
 
-# 定义一个函数，用于将m3u格式的内容转换为txt格式
+# 定义一个函数，用于将m3u格式的内容转换为txt格式========================================
 def convert_m3u_to_txt(m3u_content):
     """
     将m3u格式的内容转换为txt格式。
@@ -221,7 +227,7 @@ def convert_m3u_to_txt(m3u_content):
     # 将结果合并成一个字符串，以换行符分隔
     return '\n'.join(txt_lines)
 
-# 定义一个函数，用于检查URL是否已经存在于列表中
+# 定义一个函数，用于检查URL是否已经存在于列表中========================================
 def check_url_existence(data_list, url):
     """
     检查给定的URL是否已经存在于列表中。
@@ -233,7 +239,7 @@ def check_url_existence(data_list, url):
     urls = [item.split(',')[1] for item in data_list]
     return url not in urls #如果不存在则返回true，需要
 
-# 定义一个函数，用于清理URL中的$符号及其后面的内容
+# 定义一个函数，用于清理URL中的$符号及其后面的内容========================================
 def clean_url(url):
     """
     清理URL中的$符号及其后面的内容。
@@ -245,12 +251,12 @@ def clean_url(url):
         return url[:last_dollar_index]  # 返回$之前的部分
     return url
 
-# 定义一个列表，包含需要从频道名称中移除的特定字符或字符串
+# 定义一个列表，包含需要从频道名称中移除的特定字符或字符串========================================
 removal_list = ["_电信", "电信", "高清", "频道", "（HD）", "-HD", "英陆", "_ITV", "(北美)", "(HK)", "AKtv", "「IPV4」", "「IPV6」",
                 "频陆", "备陆", "壹陆", "贰陆", "叁陆", "肆陆", "伍陆", "陆陆", "柒陆", "频晴", "频粤", "[超清]", "高清", "超清", "标清", "斯特",
                 "粤陆", "国陆", "肆柒", "频英", "频特", "频国", "频壹", "频贰", "肆贰", "频测", "咪咕"]
 
-# 定义一个函数，用于清理频道名称中的特定字符或字符串
+# 定义一个函数，用于清理频道名称中的特定字符或字符串========================================
 def clean_channel_name(channel_name, removal_list):
     """
     清理频道名称中的特定字符或字符串。
@@ -271,6 +277,7 @@ def clean_channel_name(channel_name, removal_list):
     
     return channel_name
 
+# ================================================================================
 # 定义一个函数，用于归类处理频道行，把这部分从process_url剥离出来，为以后加入whitelist源清单做准备。包括分发到不同的频道类别。
 def process_channel_line(line):
     """
@@ -358,7 +365,7 @@ def process_channel_line(line):
             elif channel_name in cq_dictionary and check_url_existence(cq_lines, channel_address):  #地方台-重庆频道 ADD【2024-07-30 20:52:53】
                 cq_lines.append(process_name_string(line.strip()))
             elif channel_name in fj_dictionary and check_url_existence(fj_lines, channel_address):  #地方台-福建频道 ADD【2024-07-30 20:52:53】
-                            fj_lines.append(process_name_string(line.strip()))
+                fj_lines.append(process_name_string(line.strip()))
             elif channel_name in gs_dictionary and check_url_existence(gs_lines, channel_address):  #地方台-甘肃频道 ADD【2024-07-30 20:52:53】
                 gs_lines.append(process_name_string(line.strip()))
             elif channel_name in gx_dictionary and check_url_existence(gx_lines, channel_address):  #地方台-广西频道 ADD【2024-07-30 20:52:53】
@@ -394,7 +401,7 @@ def process_channel_line(line):
                     other_lines_url.append(channel_address)  # 记录已添加的URL
                     other_lines.append(line.strip())  # 将未分类的频道添加到other_lines
 
-# 定义一个函数，用于随机获取User-Agent
+# 定义一个函数，用于随机获取User-Agent========================================
 def get_random_user_agent():
     """
     随机获取一个User-Agent。
@@ -408,7 +415,7 @@ def get_random_user_agent():
     ]
     return random.choice(USER_AGENTS)
 
-# 定义一个函数，用于处理URL，包括获取内容、转换格式、分发频道等
+# 定义一个函数，用于处理URL，包括获取内容、转换格式、分发频道等========================================
 def process_url(url):
     """
     处理单个URL，读取其内容并解析频道信息。
@@ -460,10 +467,11 @@ def process_url(url):
 
 
 
-# 获取当前工作目录
-current_directory = os.getcwd()  # 准备读取txt文件
+# 获取当前工作目录，准备读取txt文件========================================
+current_directory = os.getcwd()   
 
-# 读取多个频道文件到字典中，用于后续的过滤和排序
+# 读取【主频道】目录下的频道列表文件到字典中，用于后续的过滤和排序===================
+
 ys_dictionary=read_txt_to_array('主频道/CCTV.txt')  # 仅排序用
 sh_dictionary=read_txt_to_array('主频道/shanghai.txt')  # 过滤+排序
 ws_dictionary=read_txt_to_array('主频道/卫视频道.txt')  # 过滤+排序
@@ -487,7 +495,8 @@ radio_dictionary=read_txt_to_array('主频道/收音机频道.txt')  # 过滤
 zb_dictionary=read_txt_to_array('主频道/直播中国.txt')  # 过滤
 mtv_dictionary=read_txt_to_array('主频道/MTV.txt')  # 过滤
 # Olympics_2024_Paris_dictionary=read_txt_to_array('主频道/奥运频道.txt')  # 过滤
-# 地方台频道文件
+
+# 读取【地方台】目录下的频道列表文件到字典中，用于后续的过滤和排序===================
 zj_dictionary=read_txt_to_array('地方台/浙江频道.txt')  # 过滤
 jsu_dictionary=read_txt_to_array('地方台/江苏频道.txt')  # 过滤
 gd_dictionary=read_txt_to_array('地方台/广东频道.txt')  # 过滤
@@ -523,7 +532,7 @@ tj_dictionary=read_txt_to_array('地方台/天津频道.txt')  # 过滤
 xj_dictionary=read_txt_to_array('地方台/新疆频道.txt')  # 过滤
 
 
-# 读取纠错频道名称方法
+# 读取纠错频道名称方法======================================
 def load_corrections_name(filename):
     """
     从文件中加载频道名称的纠错信息。
@@ -545,7 +554,7 @@ def load_corrections_name(filename):
                 corrections[name] = correct_name
     return corrections
 
-# 读取纠错文件
+# 读取频道名称纠错文件【assets/corrections_name.txt】=====================
 corrections_name = load_corrections_name('assets/corrections_name.txt')
 
 # 纠错频道名称
@@ -569,7 +578,7 @@ def correct_name_data(corrections, data):
         corrected_data.append(f"{name},{url}")
     return corrected_data
 
-
+# 数据进行排序====================
 def sort_data(order, data):
     """
     根据指定的顺序对数据进行排序。
@@ -593,7 +602,7 @@ def sort_data(order, data):
     sorted_data = sorted(data, key=sort_key)
     return sorted_data
 
-# 定义需要处理的URL列表，主要用于将默认 MMDD 格式日期替换为实际日期
+# 定义需要处理的URL列表【assets/urls-daily.txt】，主要用于将默认 MMDD 格式日期替换为实际日期===================
 urls = read_txt_to_array('assets/urls-daily.txt')
 # 处理每个URL
 for url in urls:
@@ -609,7 +618,7 @@ for url in urls:
         print(f"处理URL: {url}")
         process_url(url)
 
-# 定义一个函数，提取每行中逗号前面的数字部分作为排序的依据
+# 定义一个函数，提取每行中逗号前面的数字部分作为排序的依据===================
 def extract_number(s):
     """
     提取字符串中逗号前面的数字部分。
@@ -624,7 +633,7 @@ def extract_number(s):
     numbers = re.findall(r'\d+', num_str)   # 因为有+和K
     return int(numbers[-1]) if numbers else 999
 
-# 定义一个自定义排序函数
+# 定义一个自定义排序函数===================
 def custom_sort(s):
     """
     自定义排序函数，用于处理特定的排序需求。
@@ -644,7 +653,7 @@ def custom_sort(s):
     else:
         return 0  # 其他字符串保持原顺序
 
-# 读取白名单文件whitelist，把高响应源从白名单中抽出加入merged_output
+# 读取白名单文件【assets/blacklist1/whitelist_auto.txt】，把高响应源从白名单中抽出加入merged_output===================
 print(f"ADD whitelist_auto.txt")
 whitelist_auto_lines=read_txt_to_array('assets/blacklist1/whitelist_auto.txt') #
 for whitelist_line in whitelist_auto_lines:
@@ -658,7 +667,7 @@ for whitelist_line in whitelist_auto_lines:
         if response_time < 2000:  # 2s以内的高响应源
             process_channel_line(",".join(whitelist_parts[1:]))
 
-# 随机取得URL，加入今日推荐
+# 随机取得URL，加入今日推荐===================
 def get_random_url(file_path):
     """
     从文件中随机获取一个URL。
@@ -678,6 +687,7 @@ def get_random_url(file_path):
     # 随机返回一个URL
     return random.choice(urls) if urls else None
 
+# (新)每日一首MTV推荐列表文件【assets/今日推荐.txt】==================
 daily_mtv="(新)每日一首,"+get_random_url('assets/今日推荐.txt')
 
 # 获取当前的 UTC 时间
@@ -687,13 +697,15 @@ beijing_time = utc_time + timedelta(hours=8)
 # 格式化为所需的格式
 formatted_time = beijing_time.strftime("%Y%m%d %H:%M:%S")
 
+# 关于信息对应的源地址URL=================================
 about_video1=""  # 未使用的变量
 about_video2=""  # 未使用的变量
 version=formatted_time+","+about_video1  # 版本信息
 about="关于本源,"+about_video2  # 关于信息
 
-# 瘦身版
+# 瘦身版直播源===========================================
 # 
+# 【专区/about.txt】文件，显示在每日一首MTV推荐之后
 all_lines_simple =  ["更新时间,#genre#"] +[version] +[about] +[daily_mtv]+read_txt_to_array('专区/about.txt')+ ['\n'] +\
              ["🧨2025春晚🧨,#genre#"] + read_txt_to_array('专区/2025春晚.txt') + ['\n'] + \
              ["💓专享源🅰️,#genre#"] + read_txt_to_array('专区/♪专享源①.txt') + ['\n'] + \
@@ -724,6 +736,8 @@ all_lines_simple =  ["更新时间,#genre#"] +[version] +[about] +[daily_mtv]+re
 
 # 合并所有对象中的行文本（去重，排序后拼接）
 # ["奥运频道,#genre#"] + sort_data(Olympics_2024_Paris_dictionary,set(correct_name_data(corrections_name,Olympics_2024_Paris_lines))) + ['\n'] + \
+
+# 全集版直播源===========================================
 # 
 all_lines =  ["更新时间,#genre#"] +[version]  +[about] +[daily_mtv]+read_txt_to_array('专区/about.txt') + ['\n'] +\
              ["🧨2025春晚🧨,#genre#"] + read_txt_to_array('专区/2025春晚.txt') + ['\n'] + \
@@ -803,12 +817,12 @@ all_lines =  ["更新时间,#genre#"] +[version]  +[about] +[daily_mtv]+read_txt
 
 
 # ========================================写入TXT格式直播源列表文件========================================
-# 将合并后的文本写入文件
+# 定义输出直播源文件名
 output_file = "merged_output.txt"
 output_file_simple = "merged_output_simple.txt"
 others_file = "others_output.txt"
 
-# NEW将合并后的文本写入文件
+# NEW定义输出直播源文件名
 new_output_file = "live.txt"
 new_output_file_simple = "live_lite.txt"
 
@@ -816,31 +830,31 @@ new_output_file_simple = "live_lite.txt"
 # output_file_custom_wang = "custom/wang.txt"
 
 try:
-    # 将“瘦身版”内容写入文件
+    # 将“瘦身版”内容写入文件================================================
     # with open(output_file_simple, 'w', encoding='utf-8') as f:
     #     for line in all_lines_simple:  # 遍历 all_lines_simple 列表
     #         f.write(line + '\n')  # 将每一行写入文件，添加换行符
     # print(f"合并后的文本已保存到文件: {output_file_simple}")
 
-    # 将“瘦身版”内容写入新文件
+    # 将“瘦身版”内容写入新文件================================================
     with open(new_output_file_simple, 'w', encoding='utf-8') as f:
         for line in all_lines_simple:  # 遍历 all_lines_simple 列表
             f.write(line + '\n')  # 将每一行写入文件，添加换行符
     print(f"合并后的文本已保存到文件: {new_output_file_simple}")
 
-    # 将“全集版”内容写入文件
+    # 将“全集版”内容写入文件================================================
     # with open(output_file, 'w', encoding='utf-8') as f:
     #     for line in all_lines:  # 遍历 all_lines 列表
     #         f.write(line + '\n')  # 将每一行写入文件，添加换行符
     # print(f"合并后的文本已保存到文件: {output_file}")
 
-    # 将“全集版”内容写入新文件
+    # 将“全集版”内容写入新文件================================================
     with open(new_output_file, 'w', encoding='utf-8') as f:
         for line in all_lines:  # 遍历 all_lines 列表
             f.write(line + '\n')  # 将每一行写入文件，添加换行符
     print(f"合并后的文本已保存到文件: {new_output_file}")
 
-    # 将“其他”内容写入文件
+    # 将“其他”内容写入文件================================================
     with open(others_file, 'w', encoding='utf-8') as f:
         for line in other_lines:  # 遍历 other_lines 列表
             f.write(line + '\n')  # 将每一行写入文件，添加换行符
@@ -859,7 +873,7 @@ except Exception as e:
 # 报时
 #print(f"time: {datetime.now().strftime("%Y%m%d_%H_%M_%S")}")
 
-# 读取频道图标logo信息
+# 从【assets/logo.txt】读取频道图标logo信息======================================
 channels_logos = read_txt_to_array('assets/logo.txt')  # 从文件中读取logo库
 
 # 定义函数：根据频道名称获取logo
