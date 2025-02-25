@@ -10,7 +10,7 @@
 |黑名单| （blacklist_auto.txt） |  不定时 | 无效直播源自动过滤   |
 |白名单| （whitelist_auto.txt） |  不定时 | 高响应源汇至直播源   |
 
-# 黑名单文件========================================
+# 黑名单文件
     【assets/blacklist1/blacklist_auto.txt】  自动生成的黑名单，由【assets/blacklist1/blacklist1.py】生成
     【assets/blacklist1/blacklist_manual.txt】    手工编写的黑名单
 
