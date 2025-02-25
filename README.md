@@ -11,11 +11,31 @@
 |白名单| （whitelist_auto.txt） |  不定时 | 高响应源汇至直播源   |
 
 # 黑名单文件
-    【assets/blacklist1/blacklist_auto.txt】  自动生成的黑名单，由【assets/blacklist1/blacklist1.py】生成
-    【assets/blacklist1/blacklist_manual.txt】    手工编写的黑名单
+【assets/blacklist1/blacklist_auto.txt】  自动生成的黑名单，由【assets/blacklist1/blacklist1.py】生成
+【assets/blacklist1/blacklist_manual.txt】    手工编写的黑名单
 
-【主频道】目录下的频道列表文件
+# 白名单文件
+【assets/blacklist1/whitelist_auto.txt】
 
+# 频道名称纠错文件
+【assets/corrections_name.txt】
+
+# 需要处理的URL列表
+【assets/urls-daily.txt】，主要用于将默认 MMDD 格式日期替换为实际日期
+
+# 每日一首MTV推荐列表文件
+【assets/今日推荐.txt】，随机选择显示
+显示：
+(新)每日一首
+
+# about文件
+【专区/about.txt】文件，显示在每日一首MTV推荐之后
+显示：
+(年)MovieMusic欣赏
+(快)AMC音乐
+(乐)音乐欣赏
+
+# 【主频道】目录下的频道列表文件
 主频道/CCTV.txt
 主频道/shanghai.txt
 主频道/卫视频道.txt
@@ -40,7 +60,7 @@
 主频道/MTV.txt
 主频道/奥运频道.txt
 
-【地方台】目录下的频道列表文件
+# 【地方台】目录下的频道列表文件
 地方台/浙江频道.txt
 地方台/江苏频道.txt
 地方台/广东频道.txt
@@ -72,7 +92,7 @@
 地方台/天津频道.txt
 地方台/新疆频道.txt
 
-【专区】目录下的频道列表文件
+# 【专区】目录下的频道列表文件
 专区/2025春晚.txt
 专区/♪专享源①.txt
 专区/♪专享源②.txt
@@ -91,20 +111,3 @@
 专区/♪英语频道.txt
 专区/4K.txt
 专区/无锡.txt
-
-
-
-频道名称纠错文件【assets/corrections_name.txt】
-
-需要处理的URL列表【assets/urls-daily.txt】，主要用于将默认 MMDD 格式日期替换为实际日期
-
-白名单文件【assets/blacklist1/whitelist_auto.txt】
-
-==================================================================
-
-每日一首MTV推荐列表文件【assets/今日推荐.txt】，随机选择显示
-
- 【专区/about.txt】文件，显示在每日一首MTV推荐之后
-
-
-
