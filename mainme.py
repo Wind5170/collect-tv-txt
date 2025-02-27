@@ -1115,9 +1115,9 @@ def make_m3u(txt_file, m3u_file, m3u_file_copy):
 
 # 调用函数生成 M3U 文件
 make_m3u(output_file, "merged_output.m3u", "live.m3u")
-make_m3u(new_output_file, "live1.m3u")
+# make_m3u(new_output_file, "live1.m3u")
 make_m3u(output_file_simple, "merged_output_simple.m3u", "live_lite.m3u")
-make_m3u(new_output_file_simple, "live_lite1.m3u")
+# make_m3u(new_output_file_simple, "live_lite1.m3u")
 
 
 
