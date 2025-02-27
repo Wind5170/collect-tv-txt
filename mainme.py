@@ -578,18 +578,9 @@ def correct_name_data(corrections, data):
         corrected_data.append(f"{name},{url}")
     return corrected_data
 
-# 数据进行排序====================
+# 【sort_data】函数，对数据进行排序====================
+"""
 def sort_data(order, data):
-    """
-    根据指定的顺序对数据进行排序。
-    
-    参数：
-    order (list): 指定的顺序列表。
-    data (list): 需要排序的数据列表。
-    
-    返回：
-    sorted_data (list): 排序后的数据列表。
-    """
     # 创建一个字典来存储每行数据的索引
     order_dict = {name: i for i, name in enumerate(order)}
     
@@ -601,6 +592,141 @@ def sort_data(order, data):
     # 按照 order 中的顺序对数据进行排序
     sorted_data = sorted(data, key=sort_key)
     return sorted_data
+    
+"""
+
+# new 【sort_data】 函数，对数据进行排序 Update 2025.02.27====================
+def sort_data(order, data):
+    """
+    参数：
+    order (list): 指定的顺序列表。
+    data (list): 需要排序的数据列表。
+    
+    返回：
+    sorted_data (list): 排序后的数据列表。
+    """
+    # 创建优先级字典来存储每行数据的索引，支持大小写不敏感
+    order_dict = {name.lower(): i for i, name in enumerate(order)}
+    
+    # 预处理数据，提取名称并计算优先级
+    processed_data = []
+    for line in data:
+        try:
+            name = line.split(',')[0].lower()
+            priority = order_dict.get(name, len(order))
+            processed_data.append((priority, line))
+        except (IndexError, AttributeError):
+            processed_data.append((len(order), line))
+    
+    # 按优先级排序
+    sorted_data = sorted(processed_data, key=lambda x: x[0])
+    
+    # 提取原始数据并返回
+    return [item[1] for item in sorted_data]
+"""
+1. 代码功能
+该代码的主要功能是根据指定的顺序列表 order 对数据列表 data 进行排序。data 中的每个元素是一个以逗号分隔的字符串（CSV 格式），排序的依据是每个字符串的第一个字段（即名称）。如果某个名称不在 order 列表中，则将其排在最后。
+
+2. 代码实现细节
+2.1 order_dict 的创建
+order_dict = {name: i for i, name in enumerate(order)}
+这里使用字典推导式创建了一个字典 order_dict。
+
+字典的键是 order 列表中的名称，值是该名称在 order 列表中的索引。
+
+例如，如果 order = ['Alice', 'Bob', 'Charlie']，则 order_dict = {'Alice': 0, 'Bob': 1, 'Charlie': 2}。
+
+这样做的目的是为了快速查找每个名称的排序优先级。
+
+2.2 sort_key 函数
+def sort_key(line):
+    name = line.split(',')[0]
+    return order_dict.get(name, len(order))
+sort_key 是一个辅助函数，用于为 sorted 函数提供排序依据。
+
+它从每一行数据中提取第一个字段（即名称），例如 'Bob,25,Engineer' 提取出 'Bob'。
+
+然后通过 order_dict.get(name, len(order)) 查找该名称在 order_dict 中的优先级：
+
+如果名称存在于 order_dict 中，则返回其对应的值（即优先级）。
+
+如果名称不存在，则返回 len(order)，确保未列出的名称排在最后。
+
+2.3 排序
+sorted_data = sorted(data, key=sort_key)
+使用 Python 内置的 sorted 函数对 data 进行排序。
+
+key=sort_key 指定了排序的依据，即根据 sort_key 函数的返回值进行排序。
+
+2.4 返回结果
+return sorted_data
+返回排序后的列表 sorted_data。
+
+3. 代码的潜在问题
+3.1 输入数据的格式问题
+如果 data 中的某一行不符合 CSV 格式（例如没有逗号），line.split(',')[0] 会引发 IndexError。
+
+如果某一行不是字符串类型（例如是 None 或其他类型），split 方法会引发 AttributeError。
+
+3.2 大小写敏感问题
+代码默认是大小写敏感的。例如，order 列表中的 'Alice' 和 data 中的 'alice' 会被视为不同的名称。
+
+这可能导致排序结果不符合预期。
+
+3.3 性能问题
+如果 data 列表非常大，sort_key 函数会被频繁调用，可能会影响性能。
+
+每次调用 sort_key 时都会执行 split 操作，这在数据量较大时可能会成为性能瓶颈。
+
+4. 改进建议
+4.1 增加错误处理
+在 sort_key 函数中增加错误处理逻辑，确保代码的健壮性。
+
+例如：
+def sort_key(line):
+    try:
+        name = line.split(',')[0]
+        return order_dict.get(name, len(order))
+    except (IndexError, AttributeError):
+        return len(order)  # 默认将格式错误的数据排在最后
+4.2 支持大小写不敏感
+在创建 order_dict 和提取名称时，将名称统一转换为小写（或大写）。
+
+例如：
+order_dict = {name.lower(): i for i, name in enumerate(order)}
+def sort_key(line):
+    try:
+        name = line.split(',')[0].lower()
+        return order_dict.get(name, len(order))
+    except (IndexError, AttributeError):
+        return len(order)
+4.3 优化性能
+如果 data 列表非常大，可以考虑对 data 进行预处理，避免在每次调用 sort_key 时重复执行 split 操作。
+
+例如：
+def sort_data(order, data):
+    order_dict = {name.lower(): i for i, name in enumerate(order)}
+    processed_data = []
+    for line in data:
+        try:
+            name = line.split(',')[0].lower()
+            priority = order_dict.get(name, len(order))
+            processed_data.append((priority, line))
+        except (IndexError, AttributeError):
+            processed_data.append((len(order), line))
+    # 按优先级排序
+    sorted_data = sorted(processed_data, key=lambda x: x[0])
+    # 提取原始数据
+    return [item[1] for item in sorted_data]
+5. 改进后的完整代码
+"""
+
+    
+    
+    
+    
+    
+
 
 # 定义需要处理的URL列表【assets/urls-daily.txt】，主要用于将默认 MMDD 格式日期替换为实际日期===================
 urls = read_txt_to_array('assets/urls-daily.txt')
