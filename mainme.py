@@ -296,10 +296,12 @@ def process_channel_line(line):
             # 根据频道名称或频道地址，将频道分发到不同的类别
             if "CCTV" in channel_name and check_url_existence(ys_lines, channel_address):  # 央视频道
                 ys_lines.append(process_name_string(line.strip()))
+            # （CCTV）如果频道名称中有【CCTV】，且频道地址不在【ys_lines】中，则添加到【ys_lines】中。
             # elif channel_name in Olympics_2024_Paris_dictionary and check_url_existence(Olympics_2024_Paris_lines, channel_address): #奥运频道 ADD 2024-08-05
             #     Olympics_2024_Paris_lines.append(process_name_string(line.strip()))
             elif channel_name in ws_dictionary and check_url_existence(ws_lines, channel_address): #卫视频道
                 ws_lines.append(process_name_string(line.strip()))
+            # (公共)如果频道名称在字典【ws_dictionary，主频道/卫视频道.txt】中，且频道地址不在【ws_lines】中，则添加到【ws_lines】中。
             elif channel_name in ty_dictionary and check_url_existence(ty_lines, channel_address):  #体育频道
                 ty_lines.append(process_name_string(line.strip()))
             elif channel_name in dy_dictionary and check_url_existence(dy_lines, channel_address):  #电影频道
@@ -832,6 +834,77 @@ about="关于本源,"+about_video2  # 关于信息
 # 瘦身版直播源===========================================
 # 
 # 【专区/about.txt】文件，显示在每日一首MTV推荐之后
+# 合并所有对象中的行文本（去重，排序后拼接）
+"""
+["☘️山东频道,#genre#"] + sort_data(shandong_dictionary,set(correct_name_data(corrections_name,shandong_lines))) + ['\n'] + \
+
+功能：
+构建一个列表，包含山东频道的标题、处理后的数据以及一个换行符。
+组成部分：
+["☘️山东频道,#genre#"]：一个列表，包含山东频道的标题和分类标签。
+sort_data(shandong_dictionary, set(correct_name_data(corrections_name, shandong_lines)))：
+correct_name_data(corrections_name, shandong_lines)：对 shandong_lines 数据进行名称校正。
+set(...)：将校正后的数据转换为集合，去重。
+sort_data(shandong_dictionary, ...)：根据 shandong_dictionary 对去重后的数据进行排序。
+['\n']：在列表末尾添加一个换行符。
+
+
+["☘️江苏频道,#genre#"] + sorted(set(correct_name_data(corrections_name, jsu_lines))) + ['\n']
+功能：
+构建一个列表，包含江苏频道的标题、处理后的数据以及一个换行符。
+组成部分：
+["☘️江苏频道,#genre#"]：一个列表，包含江苏频道的标题和分类标签。
+sorted(set(correct_name_data(corrections_name, jsu_lines)))：
+correct_name_data(corrections_name, jsu_lines)：对 jsu_lines 数据进行名称校正。
+set(...)：将校正后的数据转换为集合，去重。
+sorted(...)：对去重后的数据进行排序。
+['\n']：在列表末尾添加一个换行符。
+
+【代码对比】
+【相似点】：
+两行代码的结构相似，都是通过列表拼接的方式构建最终结果。
+都包含频道标题、数据处理（校正、去重、排序）以及换行符。
+都使用了 correct_name_data 函数对数据进行名称校正。
+【不同点】：
+数据处理方式：
+第一行代码使用了 sort_data(shandong_dictionary, ...)，可能是根据 shandong_dictionary 对数据进行自定义排序。
+第二行代码直接使用了 sorted(...)，可能是对数据进行默认的字典序排序。
+数据来源：
+第一行代码处理的是 shandong_lines（山东频道的数据）。
+第二行代码处理的是 jsu_lines（江苏频道的数据）。
+【潜在问题】：
+如果 sort_data 和 sorted 的排序逻辑不一致，可能会导致最终结果的顺序不一致。
+如果 correct_name_data 函数的实现有问题，可能会导致数据校正不准确。
+
+
+
+【优化建议】
+统一排序逻辑：
+
+如果希望两行代码的排序逻辑一致，可以将 sort_data 替换为 sorted，或者确保 sort_data 的实现与 sorted 的行为一致。
+
+代码复用：
+
+可以将重复的逻辑提取为一个函数，例如：
+
+def build_channel_data(title, lines, corrections_name, dictionary=None):
+    corrected_data = correct_name_data(corrections_name, lines)
+    unique_data = set(corrected_data)
+    sorted_data = sort_data(dictionary, unique_data) if dictionary else sorted(unique_data)
+    return [title] + sorted_data + ['\n']
+
+result = build_channel_data("☘️山东频道,#genre#", shandong_lines, corrections_name, shandong_dictionary) + \
+         build_channel_data("☘️江苏频道,#genre#", jsu_lines, corrections_name)
+         
+换行符处理：
+
+如果换行符是用于格式化输出，可以考虑在最终输出时统一添加，而不是在每个频道数据后单独添加。         
+
+"""
+
+
+
+
 all_lines_simple =  ["更新时间,#genre#"] +[version] +[about] +[daily_mtv]+read_txt_to_array('专区/about.txt')+ ['\n'] +\
              ["🧨2025春晚🧨,#genre#"] + read_txt_to_array('专区/2025春晚.txt') + ['\n'] + \
              ["💓专享源🅰️,#genre#"] + read_txt_to_array('专区/♪专享源①.txt') + ['\n'] + \
@@ -860,7 +933,6 @@ all_lines_simple =  ["更新时间,#genre#"] +[version] +[about] +[daily_mtv]+re
              ["上海频道,#genre#"] + sort_data(sh_dictionary,set(correct_name_data(corrections_name,sh_lines))) + ['\n'] + \
              ["体育频道,#genre#"] + sort_data(ty_dictionary,set(correct_name_data(corrections_name,ty_lines))) + ['\n']
 
-# 合并所有对象中的行文本（去重，排序后拼接）
 # ["奥运频道,#genre#"] + sort_data(Olympics_2024_Paris_dictionary,set(correct_name_data(corrections_name,Olympics_2024_Paris_lines))) + ['\n'] + \
 
 # 全集版直播源===========================================
