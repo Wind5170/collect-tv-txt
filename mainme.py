@@ -830,41 +830,47 @@ new_output_file_simple = "live_lite.txt"
 # output_file_custom_wang = "custom/wang.txt"
 
 try:
-    # 将“瘦身版”内容写入文件================================================
-    # with open(output_file_simple, 'w', encoding='utf-8') as f:
-    #     for line in all_lines_simple:  # 遍历 all_lines_simple 列表
-    #         f.write(line + '\n')  # 将每一行写入文件，添加换行符
-    # print(f"合并后的文本已保存到文件: {output_file_simple}")
+    # 将“瘦身版”内容写入文件【merged_output_simple.txt】================================================
+    """
+    with open(output_file_simple, 'w', encoding='utf-8') as f:
+        for line in all_lines_simple:  # 遍历 all_lines_simple 列表
+            f.write(line + '\n')  # 将每一行写入文件，添加换行符
+    print(f"合并后的文本已保存到文件: {output_file_simple}")
+    """
 
-    # 将“瘦身版”内容写入新文件================================================
+    # 将“瘦身版”内容写入新文件【live_lite.txt】================================================
     with open(new_output_file_simple, 'w', encoding='utf-8') as f:
         for line in all_lines_simple:  # 遍历 all_lines_simple 列表
             f.write(line + '\n')  # 将每一行写入文件，添加换行符
     print(f"合并后的文本已保存到文件: {new_output_file_simple}")
 
-    # 将“全集版”内容写入文件================================================
-    # with open(output_file, 'w', encoding='utf-8') as f:
-    #     for line in all_lines:  # 遍历 all_lines 列表
-    #         f.write(line + '\n')  # 将每一行写入文件，添加换行符
-    # print(f"合并后的文本已保存到文件: {output_file}")
+    # 将“全集版”内容写入文件【merged_output.txt】================================================
+    """
+    with open(output_file, 'w', encoding='utf-8') as f:
+        for line in all_lines:  # 遍历 all_lines 列表
+            f.write(line + '\n')  # 将每一行写入文件，添加换行符
+    print(f"合并后的文本已保存到文件: {output_file}")
+    """
 
-    # 将“全集版”内容写入新文件================================================
+    # 将“全集版”内容写入新文件【live.txt】================================================
     with open(new_output_file, 'w', encoding='utf-8') as f:
         for line in all_lines:  # 遍历 all_lines 列表
             f.write(line + '\n')  # 将每一行写入文件，添加换行符
     print(f"合并后的文本已保存到文件: {new_output_file}")
 
-    # 将“其他”内容写入文件================================================
+    # 将“其他”内容写入文件【others_output.txt】================================================
     with open(others_file, 'w', encoding='utf-8') as f:
         for line in other_lines:  # 遍历 other_lines 列表
             f.write(line + '\n')  # 将每一行写入文件，添加换行符
     print(f"Others已保存到文件: {others_file}")
 
-    # 定制内容的写入（注释掉了，未启用）
-    # with open(output_file_custom_wang, 'w', encoding='utf-8') as f:
-    #     for line in custom_lines_wang:  # 遍历 custom_lines_wang 列表
-    #         f.write(line + '\n')  # 将每一行写入文件，添加换行符
-    # print(f"合并后的文本已保存到文件: {output_file_custom_wang}")
+    # 定制内容的写入【custom/wang.txt】==========================================
+    """
+    with open(output_file_custom_wang, 'w', encoding='utf-8') as f:
+        for line in custom_lines_wang:  # 遍历 custom_lines_wang 列表
+             f.write(line + '\n')  # 将每一行写入文件，添加换行符
+    print(f"合并后的文本已保存到文件: {output_file_custom_wang}")
+    """
 
 except Exception as e:
     print(f"保存文件时发生错误：{e}")  # 捕获异常并打印错误信息
@@ -921,6 +927,7 @@ def get_logo_by_channel_name(channel_name):
 #     file.write(output_text)
 
 # print("merged_output.m3u文件已生成。")
+
 # 定义函数：生成 M3U 文件
 def make_m3u(txt_file, m3u_file, m3u_file_copy):
     """
@@ -981,8 +988,10 @@ def make_m3u(txt_file, m3u_file, m3u_file_copy):
         print(f"发生错误: {e}")  # 捕获异常并打印错误信息
 
 # 调用函数生成 M3U 文件
-make_m3u(output_file, "merged_output.m3u", "live.m3u")
-make_m3u(output_file_simple, "merged_output_simple.m3u", "live_lite.m3u")
+# make_m3u(output_file, "merged_output.m3u", "live.m3u")
+make_m3u(new_output_file, "live.m3u")
+# make_m3u(output_file_simple, "merged_output_simple.m3u", "live_lite.m3u")
+make_m3u(new_output_file_simple, "live_lite.m3u")
 
 
 
