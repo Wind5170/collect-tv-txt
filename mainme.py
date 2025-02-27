@@ -831,12 +831,12 @@ new_output_file_simple = "live_lite.txt"
 
 try:
     # 将“瘦身版”内容写入文件【merged_output_simple.txt】================================================
-    """
+    # """
     with open(output_file_simple, 'w', encoding='utf-8') as f:
         for line in all_lines_simple:  # 遍历 all_lines_simple 列表
             f.write(line + '\n')  # 将每一行写入文件，添加换行符
     print(f"合并后的文本已保存到文件: {output_file_simple}")
-    """
+   # """
 
     # 将“瘦身版”内容写入新文件【live_lite.txt】================================================
     with open(new_output_file_simple, 'w', encoding='utf-8') as f:
@@ -845,12 +845,12 @@ try:
     print(f"合并后的文本已保存到文件: {new_output_file_simple}")
 
     # 将“全集版”内容写入文件【merged_output.txt】================================================
-    """
+    # """
     with open(output_file, 'w', encoding='utf-8') as f:
         for line in all_lines:  # 遍历 all_lines 列表
             f.write(line + '\n')  # 将每一行写入文件，添加换行符
     print(f"合并后的文本已保存到文件: {output_file}")
-    """
+    #"""
 
     # 将“全集版”内容写入新文件【live.txt】================================================
     with open(new_output_file, 'w', encoding='utf-8') as f:
@@ -988,10 +988,10 @@ def make_m3u(txt_file, m3u_file, m3u_file_copy):
         print(f"发生错误: {e}")  # 捕获异常并打印错误信息
 
 # 调用函数生成 M3U 文件
-# make_m3u(output_file, "merged_output.m3u", "live.m3u")
-make_m3u(new_output_file, "live.m3u")
-# make_m3u(output_file_simple, "merged_output_simple.m3u", "live_lite.m3u")
-make_m3u(new_output_file_simple, "live_lite.m3u")
+make_m3u(output_file, "merged_output.m3u", "live.m3u")
+make_m3u(new_output_file, "live1.m3u")
+make_m3u(output_file_simple, "merged_output_simple.m3u", "live_lite.m3u")
+make_m3u(new_output_file_simple, "live_lite1.m3u")
 
 
 
