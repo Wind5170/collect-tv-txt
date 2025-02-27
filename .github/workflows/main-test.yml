@@ -29,7 +29,7 @@ jobs:
         pip install opencc-python-reimplemented
         
     - name: Run Python script
-      run: python main-none.py
+      run: python mainme.py
       
     - name: Upload generated files
       uses: actions/upload-artifact@v4
