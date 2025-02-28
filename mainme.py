@@ -731,7 +731,7 @@ def sort_data(order, data):
 
 # 处理将检索的直播源列表【assets/urls-daily.txt】，将默认 MMDD 格式日期替换为实际日期===================
 urls = read_txt_to_array('assets/urls-daily.txt')
-# 处理每个URL
+
 for url in urls:
     if url.startswith("http"):
         if "{MMdd}" in url:  # 特别处理frxz751113/IPTVzb1
@@ -780,19 +780,39 @@ def custom_sort(s):
     else:
         return 0  # 其他字符串保持原顺序
 
-# 读取白名单文件【assets/blacklist1/whitelist_auto.txt】，把高响应源从白名单中抽出加入merged_output===================
+# 读取白名单文件【assets/blacklist1/whitelist_auto.txt】，把高响应源从白名单中抽出加入merged_output===
+
 print(f"ADD whitelist_auto.txt")
-whitelist_auto_lines=read_txt_to_array('assets/blacklist1/whitelist_auto.txt') #
+# 提示信息，表示正在处理 whitelist_auto.txt 文件
+
+whitelist_auto_lines = read_txt_to_array('assets/blacklist1/whitelist_auto.txt')
+# 读取 whitelist_auto.txt 文件内容，并将其按行存储到数组 whitelist_auto_lines 中
+# read_txt_to_array 是一个自定义函数，用于读取文件并返回行数组
+
 for whitelist_line in whitelist_auto_lines:
-    if  "#genre#" not in whitelist_line and "," in whitelist_line and "://" in whitelist_line:
+# 遍历 whitelist_auto_lines 数组中的每一行
+    if "#genre#" not in whitelist_line and "," in whitelist_line and "://" in whitelist_line:
+    # 检查当前行是否满足以下条件：
+    # 1. 不包含 "#genre#" 字符串
+    # 2. 包含逗号 ","
+    # 3. 包含 "://"（通常是 URL 的协议部分，如 http:// 或 https://）
         whitelist_parts = whitelist_line.split(",")
+        # 如果满足条件，将当前行按逗号分割成多个部分，存储到 whitelist_parts 数组中
         try:
-            response_time = float(whitelist_parts[0].replace("ms", ""))  # 提取响应时间
+        # 尝试将第一个部分（假设是响应时间）转换为浮点数
+        # 例如，如果 whitelist_parts[0] 是 "100ms"，则替换 "ms" 后转换为 100.0
+            response_time = float(whitelist_parts[0].replace("ms", ""))
         except ValueError:
             print(f"response_time转换失败: {whitelist_line}")
-            response_time = 60000  # 单位毫秒，转换失败给个60秒
-        if response_time < 2000:  # 2s以内的高响应源
+            # 如果转换失败（例如，格式不正确），输出错误信息，并将 response_time 设置为 60000 毫秒（60 秒）
+            response_time = 60000  # 单位毫秒，转换失败给个默认值 60 秒
+
+        if response_time < 2000:
+        # 检查响应时间是否小于 2000 毫秒（2 秒）
+            # 如果响应时间小于 2 秒，表示这是一个高响应源
             process_channel_line(",".join(whitelist_parts[1:]))
+            # 将 whitelist_parts 数组中除第一个部分（响应时间）之外的部分重新用逗号连接成一个字符串
+            # 并调用 process_channel_line 函数处理该字符串
 
 # 随机取得URL，加入今日推荐===================
 def get_random_url(file_path):
@@ -830,10 +850,7 @@ about_video2=""  # 未使用的变量
 version=formatted_time+","+about_video1  # 版本信息
 about="关于本源,"+about_video2  # 关于信息
 
-# 瘦身版直播源===========================================
-# 
-# 【专区/about.txt】文件，显示在每日一首MTV推荐之后
-# 合并所有对象中的行文本（去重，排序后拼接）
+
 """
 ["☘️山东频道,#genre#"] + sort_data(shandong_dictionary,set(correct_name_data(corrections_name,shandong_lines))) + ['\n'] + \
 
@@ -902,7 +919,10 @@ result = build_channel_data("☘️山东频道,#genre#", shandong_lines, correc
 """
 
 
-
+# 瘦身版直播源===========================================
+# 
+# 【专区/about.txt】文件，显示在每日一首MTV推荐之后
+# 合并所有对象中的行文本（去重，排序后拼接）
 
 all_lines_simple =  ["更新时间,#genre#"] +[version] +[about] +[daily_mtv]+read_txt_to_array('专区/about.txt')+ ['\n'] +\
              ["🧨2025春晚🧨,#genre#"] + read_txt_to_array('专区/2025春晚.txt') + ['\n'] + \
