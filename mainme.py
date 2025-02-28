@@ -59,7 +59,6 @@ def read_blacklist_from_txt(file_path):
     【assets/blacklist1/blacklist_auto.txt】  自动生成的黑名单，由【assets/blacklist1/blacklist1.py】生成
     【assets/blacklist1/blacklist_manual.txt】    手工编写的黑名单
     """
-
 blacklist_auto = read_blacklist_from_txt('assets/blacklist1/blacklist_auto.txt')
 blacklist_manual = read_blacklist_from_txt('assets/blacklist1/blacklist_manual.txt')
 # combined_blacklist = list(set(blacklist_auto + blacklist_manual))
@@ -730,16 +729,16 @@ def sort_data(order, data):
     
 
 
-# 定义需要处理的URL列表【assets/urls-daily.txt】，主要用于将默认 MMDD 格式日期替换为实际日期===================
+# 处理将检索的直播源列表【assets/urls-daily.txt】，将默认 MMDD 格式日期替换为实际日期===================
 urls = read_txt_to_array('assets/urls-daily.txt')
 # 处理每个URL
 for url in urls:
     if url.startswith("http"):
-        if "{MMdd}" in url:  # 特别处理113
+        if "{MMdd}" in url:  # 特别处理frxz751113/IPTVzb1
             current_date_str = datetime.now().strftime("%m%d")
             url=url.replace("{MMdd}", current_date_str)
 
-        if "{MMdd-1}" in url:  # 特别处理113
+        if "{MMdd-1}" in url:  # 特别处理frxz751113/IPTVzb1
             yesterday_date_str = (datetime.now() - timedelta(days=1)).strftime("%m%d")
             url=url.replace("{MMdd-1}", yesterday_date_str)
             
